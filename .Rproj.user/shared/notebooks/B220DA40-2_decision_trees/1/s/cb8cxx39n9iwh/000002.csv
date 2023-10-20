@@ -1,0 +1,8 @@
+"0","```r
+sensitivity <- thrones_test_pred %>% 
+  sensitivity(truth = met_dragon_flag,
+              estimate = pred,
+              event_level = \"second\") # second column of conf matrix is the \"truth\"
+
+sensitivity
+```"

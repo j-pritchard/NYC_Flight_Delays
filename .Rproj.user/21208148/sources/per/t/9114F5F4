@@ -1,0 +1,29 @@
+{
+    "id": "9114F5F4",
+    "path": "~/CodeClan/codeclan_work/final_project/analysis_and_report/4_model_building.Rmd",
+    "project_path": "analysis_and_report/4_model_building.Rmd",
+    "type": "r_markdown",
+    "hash": "2341110987",
+    "contents": "",
+    "dirty": false,
+    "created": 1697118026435.0,
+    "source_on_save": false,
+    "relative_order": 6,
+    "properties": {
+        "tempName": "Untitled1",
+        "chunk_output_type": "inline",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "232,0",
+        "scrollLine": "232",
+        "docOutlineVisible": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1697738291,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1697738291510,
+    "read_only": false,
+    "read_only_alternatives": []
+}

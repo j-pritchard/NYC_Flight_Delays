@@ -1,0 +1,4 @@
+"0","all_flights %>% "
+"0","  ggplot(aes(x = dep_delay)) +"
+"0","  geom_histogram(bins = 50, colour = ""white"") +"
+"0","  scale_x_continuous(limits = c(-20, 100))"

@@ -1,0 +1,7 @@
+"0","```r
+library(tidyverse)
+library(rpart)
+library(rpart.plot)
+
+thrones <- read_csv(\"data/character_data_S01-S08.csv\")
+```"

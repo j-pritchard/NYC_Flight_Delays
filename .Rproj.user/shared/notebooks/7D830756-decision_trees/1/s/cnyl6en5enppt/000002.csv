@@ -1,0 +1,10 @@
+"0","```r
+titanic_clean <- titanic_set %>% 
+  mutate(sex = as.factor(sex), 
+         survived = factor(survived, levels = c(0, 1), labels = c(\"No\", \"Yes\")), 
+         pclass = factor(pclass, levels = c(1, 2, 3)), 
+         embarked = factor(embarked),
+         age_status = as.factor(if_else(age <= 16, \"child\", \"adult\")), .after = age) %>% 
+  select(pclass, sex, age_status, sib_sp, parch, embarked, survived) %>% 
+  drop_na()
+```"

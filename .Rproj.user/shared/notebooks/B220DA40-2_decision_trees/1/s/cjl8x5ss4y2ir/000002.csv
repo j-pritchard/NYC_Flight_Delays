@@ -1,0 +1,10 @@
+"0","```r
+library(modelr)
+```"
+"1","Warning: package ‘modelr’ was built under R version 4.2.3
+"
+"0","```r
+# add predictions
+thrones_test_pred <- thrones_test %>% 
+  add_predictions(thrones_fit, type = \"class\")
+```"

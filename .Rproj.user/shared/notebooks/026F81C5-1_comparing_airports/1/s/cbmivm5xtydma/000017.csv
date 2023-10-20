@@ -1,0 +1,3 @@
+"0","departures %>% "
+"0","  group_by(origin) %>% "
+"0","  summarise(prop_delayed = sum(delayed_flag)/n())"

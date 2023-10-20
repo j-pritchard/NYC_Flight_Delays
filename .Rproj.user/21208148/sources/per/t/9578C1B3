@@ -1,0 +1,28 @@
+{
+    "id": "9578C1B3",
+    "path": "~/CodeClan/codeclan_work/final_project/analysis_and_report/1_comparing_airports.Rmd",
+    "project_path": "analysis_and_report/1_comparing_airports.Rmd",
+    "type": "r_markdown",
+    "hash": "2898089646",
+    "contents": "",
+    "dirty": false,
+    "created": 1696943226233.0,
+    "source_on_save": false,
+    "relative_order": 3,
+    "properties": {
+        "tempName": "Untitled1",
+        "chunk_output_type": "inline",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "45,0",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1697663960,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1697663960572,
+    "read_only": false,
+    "read_only_alternatives": []
+}

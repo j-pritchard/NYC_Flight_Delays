@@ -1,0 +1,3 @@
+"0","flights_with_5pred <- flights %>%"
+"0","  add_predictions(flights_logreg_model, type = ""response"")"
+"0","head(flights_with_5pred, 20)"

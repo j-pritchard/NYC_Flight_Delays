@@ -1,0 +1,15 @@
+"0","```r
+```r
+energy_scotland %>% 
+  filter(sector %in% c(\Gas\, \Pumped hydro\, \Renewables\)) %>% 
+  ggplot(aes(x = year, y = energy_prod, group = sector, colour = sector)) +
+  geom_line() +
+  geom_point() +
+  scale_x_continuous(breaks = years, minor_breaks = NULL) +
+  labs(title = \Energy production in Scotland over time split by sector\,
+       x =\\,
+       y = \Energy production\n\,
+       colour = \Sector\) +
+  theme_minimal()
+```
+```"

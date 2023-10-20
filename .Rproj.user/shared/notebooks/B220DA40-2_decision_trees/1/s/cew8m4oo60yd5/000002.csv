@@ -1,0 +1,4 @@
+"0","```r
+thrones_test_pred %>% 
+  select(prominence, allegiance_last, religion, featured_episode_count, met_dragon_flag, pred)
+```"

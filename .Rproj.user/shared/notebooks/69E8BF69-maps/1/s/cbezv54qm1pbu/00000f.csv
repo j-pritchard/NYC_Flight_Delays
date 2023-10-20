@@ -1,0 +1,6 @@
+"0","worst_routes_lines <- data.frame("
+"0","  id = worst_routes$id,"
+"0","  lat = c(worst_routes$origin_lat, worst_routes$dest_lat),"
+"0","  lon = c(worst_routes$origin_lon, worst_routes$dest_lon)"
+"0",") %>% "
+"0","  arrange(id)"

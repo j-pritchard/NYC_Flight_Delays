@@ -1,0 +1,14 @@
+"0","```r
+titanic_tree <- rpart(
+  formula = survived ~ .,
+  data = titanic_train,
+  method = \"class\")
+
+rpart.plot(titanic_tree,
+           yesno = 2,
+           type = 2, 
+           fallen.leaves = TRUE, 
+           faclen = 6,
+           digits = 3, 
+           split.border.col = 1)
+```"

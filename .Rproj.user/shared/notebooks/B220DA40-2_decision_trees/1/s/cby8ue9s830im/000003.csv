@@ -1,0 +1,7 @@
+"0","```r
+
+specificity(data = thrones_pred,
+            truth = met_dragon_flag,
+            estimate = pred,
+            event_level = \"second\")
+```"

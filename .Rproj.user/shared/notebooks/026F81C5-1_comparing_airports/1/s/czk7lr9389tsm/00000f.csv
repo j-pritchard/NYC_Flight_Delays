@@ -1,0 +1,6 @@
+"0","departures %>% "
+"0","  filter(dep_delay <= (mean(dep_delay) + 5*sd(dep_delay)), # removing outliers"
+"0","         sched_dep_time >= 1500) %>% # only after 3pm"
+"0","  group_by(origin) %>%"
+"0","  summarise(after_3pm_mean_delay = mean(dep_delay),"
+"0","            after_3pm_median_delay = median(dep_delay))"

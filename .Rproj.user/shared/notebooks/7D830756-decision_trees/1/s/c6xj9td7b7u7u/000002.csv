@@ -1,0 +1,15 @@
+"0","```r
+accuracy <- titanic_test_pred %>% 
+  accuracy(truth = survived,
+           estimate = pred)
+sensitivity <- titanic_test_pred %>% 
+  sensitivity(truth = survived,
+              estimate = pred,
+              event_level = \"second\")
+specificity <- titanic_test_pred %>% 
+  specificity(truth = survived,
+              estimate = pred,
+              event_level = \"second\")
+
+accuracy
+```"

@@ -1,0 +1,8 @@
+"0",""
+"0","departures %>% "
+"0","  mutate(month = month(time_hour)) %>%"
+"0","  filter(dep_delay <= (mean(dep_delay) + 5*sd(dep_delay)), # removing outliers"
+"0","         month %in% c(11, 12, 1, 2)) %>% # only Nov - Feb"
+"0","  group_by(origin) %>%"
+"0","  summarise(winter_mean_delay = mean(dep_delay),"
+"0","            winter_median_delay = median(dep_delay))"

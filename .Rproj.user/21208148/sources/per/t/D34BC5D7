@@ -1,0 +1,28 @@
+{
+    "id": "D34BC5D7",
+    "path": "~/CodeClan/codeclan_work/final_project/analysis_and_report/0_data_exploration.Rmd",
+    "project_path": "analysis_and_report/0_data_exploration.Rmd",
+    "type": "r_markdown",
+    "hash": "3661094065",
+    "contents": "",
+    "dirty": false,
+    "created": 1696928293134.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "tempName": "Untitled1",
+        "chunk_output_type": "inline",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "42,0",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1697446243,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1697446243502,
+    "read_only": false,
+    "read_only_alternatives": []
+}

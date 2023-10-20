@@ -1,0 +1,16 @@
+"0","```r
+# make tree
+thrones_fit <- rpart(
+  formula = met_dragon_flag ~ .,  # all variables included
+  data = thrones_train,
+  method = \"class\") # class for categorical; anova for continuous
+
+# plot tree
+rpart.plot(thrones_fit,
+           yesno = 2, # writes yes/no at all splits
+           type = 2, # where conditions lie
+           fallen.leaves = TRUE, # TRUE aligns leaves at bottom
+           faclen = 6, # max char length for categoricals
+           digits = 3, # sig figs of numbers
+           split.border.col = 1) # changes border colour of conditions
+```"

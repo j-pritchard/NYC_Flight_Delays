@@ -1,0 +1,13 @@
+"0","```r
+library(rpart)
+library(rpart.plot)
+library(tidyverse)
+library(GGally)
+library(modelr)
+library(yardstick)
+library(splitstackshape)
+
+titanic_set <- read_csv('data/titanic_decision_tree_data.csv')
+
+head(titanic_set, 10)
+```"

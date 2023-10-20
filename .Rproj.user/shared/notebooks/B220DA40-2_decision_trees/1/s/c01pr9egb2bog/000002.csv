@@ -1,0 +1,26 @@
+"0","```r
+library(yardstick)
+```"
+"1","Warning: package ‘yardstick’ was built under R version 4.2.3
+Attaching package: ‘yardstick’
+
+The following objects are masked from ‘package:modelr’:
+
+    mae, mape, rmse
+
+The following object is masked from ‘package:readr’:
+
+    spec
+"
+"0","```r
+conf_mat <- thrones_test_pred %>% 
+  conf_mat(truth = met_dragon_flag,
+           estimate = pred)
+
+conf_mat
+```"
+"1","                      Truth
+Prediction             Didn't meet a dragon Met a dragon
+  Didn't meet a dragon                   19           10
+  Met a dragon                            8           32
+"

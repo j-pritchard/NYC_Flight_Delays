@@ -1,0 +1,4 @@
+"0",""
+"0","p_value <- null_distribution %>%"
+"0","  get_p_value(obs_stat = observed_stat, direction = ""right"")"
+"0","p_value"

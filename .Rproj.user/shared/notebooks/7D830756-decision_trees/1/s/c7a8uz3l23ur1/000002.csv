@@ -1,0 +1,4 @@
+"0","```r
+# ggpairs(titanic_clean, progress = FALSE)
+# ggsave(\"titanic_ggpair.png\", width = 15, height = 15)
+```"

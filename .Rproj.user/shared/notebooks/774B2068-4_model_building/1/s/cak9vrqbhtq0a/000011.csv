@@ -1,0 +1,8 @@
+"0","bad_days_flights_reduced <- bad_days_flights %>%"
+"0","  select(hour, temp, dewpoint, humidity, precip, pressure, wind_speed,"
+"0","         wind_dir, visib, snow, carrier, disrupted_flag)"
+"0",""
+"0","nrows <- nrow(bad_days_flights_reduced)"
+"0","test_index <- sample(1 : nrows, size = nrows*0.2)"
+"0","bad_days_flights_reduced_test <- slice(bad_days_flights_reduced, test_index)"
+"0","bad_days_flights_reduced_train <- slice(bad_days_flights_reduced, -test_index)"

@@ -1,0 +1,106 @@
+"0","```r
+print(\"Training Data Survived:\")
+```"
+"1","[1] \"Training Data Survived:\"
+"
+"0","```r
+titanic_train %>% 
+  janitor::tabyl(survived)
+```"
+"1"," survived   n   percent
+       No 341 0.5982456
+      Yes 229 0.4017544
+"
+"0","```r
+print(\"Test Data Survived:\")
+```"
+"1","[1] \"Test Data Survived:\"
+"
+"0","```r
+titanic_test %>% 
+  janitor::tabyl(survived)
+```"
+"1"," survived  n  percent
+       No 83 0.584507
+      Yes 59 0.415493
+"
+"0","```r
+print(\"Training Data pclass:\")
+```"
+"1","[1] \"Training Data pclass:\"
+"
+"0","```r
+titanic_train %>% 
+  janitor::tabyl(pclass)
+```"
+"1"," pclass   n   percent
+      1 148 0.2596491
+      2 139 0.2438596
+      3 283 0.4964912
+"
+"0","```r
+print(\"Test Data pclass:\")
+```"
+"1","[1] \"Test Data pclass:\"
+"
+"0","```r
+titanic_test %>% 
+  janitor::tabyl(pclass)
+```"
+"1"," pclass  n   percent
+      1 36 0.2535211
+      2 34 0.2394366
+      3 72 0.5070423
+"
+"0","```r
+print(\"Training Data sex:\")
+```"
+"1","[1] \"Training Data sex:\"
+"
+"0","```r
+titanic_train %>% 
+  janitor::tabyl(sex)
+```"
+"1","    sex   n   percent
+ female 207 0.3631579
+   male 363 0.6368421
+"
+"0","```r
+print(\"Test Data sex:\")
+```"
+"1","[1] \"Test Data sex:\"
+"
+"0","```r
+titanic_test %>% 
+  janitor::tabyl(sex)
+```"
+"1","    sex  n   percent
+ female 52 0.3661972
+   male 90 0.6338028
+"
+"0","```r
+print(\"Training Data age_status:\")
+```"
+"1","[1] \"Training Data age_status:\"
+"
+"0","```r
+titanic_train %>% 
+  janitor::tabyl(age_status)
+```"
+"1"," age_status   n   percent
+      adult 490 0.8596491
+      child  80 0.1403509
+"
+"0","```r
+print(\"Test Data age_status:\")
+```"
+"1","[1] \"Test Data age_status:\"
+"
+"0","```r
+titanic_test %>% 
+  janitor::tabyl(age_status)
+```"
+"1"," age_status   n   percent
+      adult 122 0.8591549
+      child  20 0.1408451
+"

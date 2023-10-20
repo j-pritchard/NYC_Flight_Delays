@@ -1,0 +1,136 @@
+---
+title: "Data Exploration"
+output: html_notebook
+---
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+library(tidyverse)
+
+all_flights <- read_csv("../clean_data/all_flight_data.csv") %>% 
+  mutate_at(c("delayed_flag", "cancelled_flag", "disrupted_flag"), as.factor)
+```
+
+```{r}
+all_flights %>% 
+  ggplot(aes(x = dep_delay)) +
+  geom_histogram(bins = 50, colour = "white") +
+  scale_x_continuous(limits = c(-20, 100))
+
+all_flights %>% 
+  ggplot(aes(x = wind_speed, fill = delayed_flag)) +
+  geom_histogram(bins = 50)
+
+all_flights %>% 
+  ggplot(aes(x = temp, fill = delayed_flag)) +
+  geom_histogram(bins = 50)
+
+all_flights %>% 
+  ggplot(aes(x = wind_dir, fill = delayed_flag)) +
+  geom_histogram(bins = 50)
+
+all_flights %>% 
+  ggplot(aes(x = precip, fill = delayed_flag)) +
+  geom_histogram(bins = 50)
+```
+
+# Drone Flights??
+```{r}
+planes <- read_csv("../raw_data/planes.csv")
+
+drones <- planes %>% 
+  filter(is.na(seats) == TRUE) %>% 
+  pull(tailnum)
+
+all_flights %>% 
+  filter(tailnum %in% drones) %>% 
+  arrange(tailnum)
+
+rm(planes, drones)
+```
+
+# Cancelled Flights
+```{r}
+all_flights %>% 
+  filter(cancelled_flag == 1) %>%  
+  mutate(week = week(time_hour)) %>% 
+  group_by(origin, week) %>% 
+  summarise(count = n()) %>% 
+  ggplot(aes(x = week, y = count)) +
+  geom_line(aes(colour = origin))
+```
+
+
+# delays during most extreme weather conditions?
+```{r}
+departures <- all_flights %>% 
+  filter(is.na(dep_time) == FALSE)
+
+departures %>% 
+  filter(dewpoint <= quantile(departures$dewpoint, probs = seq(.2, .8, by = .2))[[1]] |
+         wind_speed >= quantile(departures$wind_speed, probs = seq(.2, .8, by = .2))[[4]] |
+         precip >= quantile(departures$precip, probs = seq(.2, .8, by = .2))[[4]]) %>% 
+ count(delayed_flag)
+```
+
+
+# Number of delayed/cancelled flights each day
+```{r}
+all_flights %>% 
+  filter(disrupted_flag == 1) %>% 
+  mutate(date = date(time_hour)) %>% 
+  group_by(date) %>% 
+  summarise(count = n()) %>% 
+  slice_max(count, n = 10)
+```
+
+```{r}
+all_flights %>% 
+  filter(disrupted_flag == 1) %>% 
+  mutate(date = date(time_hour)) %>% 
+  group_by(date) %>% 
+  summarise(count = n()) %>% 
+  ggplot(aes(x = date, y = count)) +
+  geom_line()
+```
+
+```{r}
+bad_days <- all_flights %>% 
+  filter(disrupted_flag == 1) %>% 
+  mutate(date = date(time_hour)) %>% 
+  group_by(date) %>% 
+  summarise(count = n()) %>% 
+  filter(count > (mean(count) + 2.5 * sd(count))) %>% 
+  pull(date)
+```
+
+```{r}
+all_flights %>% 
+  mutate(date = date(time_hour)) %>%
+  filter(date %in% bad_days) %>% 
+  count(disrupted_flag)
+```
+
+Weekdays?
+```{r message=FALSE, warning=FALSE}
+departures %>% 
+  mutate(weekday = factor(weekdays(time_hour),
+                          levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))) %>% 
+  group_by(origin, weekday) %>% 
+  summarise(num_flights = n()) %>% 
+  ggplot() +
+  geom_col(aes(x = weekday, y = num_flights, fill = origin)) +
+  theme_minimal() +
+  labs(title = "All Flights")
+
+departures %>% 
+  mutate(weekday = factor(weekdays(time_hour),
+                          levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))) %>%
+  filter(delayed_flag == 1) %>% 
+  group_by(origin, weekday) %>% 
+  summarise(num_flights = n()) %>% 
+  ggplot() +
+  geom_col(aes(x = weekday, y = num_flights, fill = origin)) +
+  theme_minimal() +
+  labs(title = "Delayed Flights")
+```
+

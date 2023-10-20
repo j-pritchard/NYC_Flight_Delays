@@ -1,0 +1,16 @@
+"0","planes <- read_csv(""../raw_data/planes.csv"")"
+"2","[1mRows: [22m[34m3521[39m [1mColumns: [22m[34m9[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m──────────────────────────────────────────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (5): tailnum, type, manufacturer, model, engine
+[32mdbl[39m (4): year, engines, seats, speed"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"0","drones <- planes %>% "
+"0","  filter(is.na(seats) == TRUE) %>% "
+"0","  pull(tailnum)"
+"0",""
+"0","all_flights %>% "
+"0","  filter(tailnum %in% drones) %>% "
+"0","  arrange(tailnum)"

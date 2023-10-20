@@ -1,0 +1,4 @@
+"0","nrows <- nrow(flights)"
+"0","test_index <- sample(1 : nrows, size = nrows*0.2)"
+"0","flights_test <- slice(flights, test_index)"
+"0","flights_train <- slice(flights, -test_index)"

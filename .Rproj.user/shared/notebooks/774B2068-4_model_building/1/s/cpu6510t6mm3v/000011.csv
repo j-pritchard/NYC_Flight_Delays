@@ -1,0 +1,6 @@
+"0","rf_classifier <- ranger(disrupted_flag ~ ., "
+"0","                        data = flights_train,"
+"0","                        importance = ""impurity"", "
+"0","                        num.trees = 100, "
+"0","                        mtry = 2, "
+"0","                        min.node.size = 1)"

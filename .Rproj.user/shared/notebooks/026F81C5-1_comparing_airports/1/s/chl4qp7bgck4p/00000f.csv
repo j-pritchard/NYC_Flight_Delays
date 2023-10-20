@@ -1,0 +1,7 @@
+"0","library(tidyverse)"
+"0","library(infer)"
+"0",""
+"0","x3colours = c(""#41b6c4"", ""#2c7fb8"", ""#253494"")"
+"0",""
+"0","departures <- read_csv(""../clean_data/all_flight_data.csv"") %>% "
+"0","  drop_na(dep_time)"

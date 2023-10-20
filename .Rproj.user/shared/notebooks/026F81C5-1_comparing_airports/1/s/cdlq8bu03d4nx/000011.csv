@@ -1,0 +1,6 @@
+"0",""
+"0","departures %>% "
+"0","  group_by(origin) %>% "
+"0","  reframe(five_num_summary = c(""L"", ""Q1"", ""Q2"", ""Q3"", ""H""),"
+"0","          delay = quantile(dep_delay, seq(0, 1, 0.25))) %>% "
+"0","  pivot_wider(id_cols = origin, names_from = five_num_summary, values_from = delay)"

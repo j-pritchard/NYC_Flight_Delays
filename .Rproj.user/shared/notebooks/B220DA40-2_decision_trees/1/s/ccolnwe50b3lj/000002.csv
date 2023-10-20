@@ -1,0 +1,38 @@
+"0","```r
+clean_thrones <- thrones %>% 
+  # Remove death!
+  rename_with(.cols = starts_with(\"dth\"),
+              .fn = ~str_replace(.x, \"dth\", \"met_dragon\")) %>% 
+  # Only keep variables of interest
+  select(c(sex, religion, occupation, social_status, allegiance_last,
+           allegiance_switched, met_dragon_flag, featured_episode_count, prominence)) %>% 
+  # Convert to factor level
+  mutate(sex = factor(sex,
+                      levels = c(1, 2, 9),
+                      labels = c(\"Male\", \"Female\", \"Unknown\")),
+         religion = factor(religion,
+                           levels = c(0, 1, 3, 4, 5, 6, 7, 9),
+                           labels = c(\"Great Stallion\", \"Lord of Light\", 
+                                      \"Faith of the Seven\", \"Old Gods\", 
+                                      \"Drowned God\", \"Many Faced God\", 
+                                      \"Other\", \"Unknown\")),
+         occupation = factor(occupation,
+                             levels = c(1, 2, 9),
+                             labels = c(\"Silk-collar\", \"Leather-collar\", \"Unknown\")),
+         social_status = factor(social_status,
+                                levels = c(1, 2, 9),
+                                labels = c(\"Highborn\", \"Lowborn\", \"Unknown\")),
+         allegiance_last = factor(allegiance_last,
+                                  levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9),
+                                  labels = c(\"Stark\", \"Targaryen\", \"Night's Watch\",
+                                             \"Lannister\", \"Greyjoy\", \"Bolton\",
+                                             \"Frey\", \"Other\", \"Unknown\")),
+         allegiance_switched = factor(allegiance_switched,
+                                      levels = c(1, 2, 9),
+                                      labels = c(\"No\", \"Yes\", \"Unknown\")),
+         met_dragon_flag = factor(met_dragon_flag,
+                                  levels = c(0, 1),
+                                  labels = c(\"Didn't meet a dragon\", \"Met a dragon\"))) %>%
+  # Remove NAs 
+  drop_na()
+```"

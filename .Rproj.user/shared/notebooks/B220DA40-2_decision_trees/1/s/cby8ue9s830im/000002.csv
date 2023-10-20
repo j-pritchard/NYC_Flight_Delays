@@ -1,0 +1,23 @@
+"0","```r
+# add predictions and select important columns
+thrones_pred <- clean_thrones %>% 
+  add_predictions(thrones_fit, type = \"class\") %>% 
+  select(prominence, allegiance_last, religion, featured_episode_count, met_dragon_flag, pred)
+
+all_conf_mat <- thrones_pred %>% 
+  conf_mat(truth = met_dragon_flag,
+           estimate = pred)
+
+all_conf_mat
+```"
+"1","                      Truth
+Prediction             Didn't meet a dragon Met a dragon
+  Didn't meet a dragon                  108           29
+  Met a dragon                           34          174
+"
+"0","```r
+sensitivity(data = thrones_pred,
+            truth = met_dragon_flag,
+            estimate = pred,
+            event_level = \"second\")
+```"

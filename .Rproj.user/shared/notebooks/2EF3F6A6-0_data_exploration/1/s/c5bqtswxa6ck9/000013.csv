@@ -1,0 +1,6 @@
+"0","all_flights %>% "
+"0","  filter(disrupted_flag == 1) %>% "
+"0","  mutate(date = date(time_hour)) %>% "
+"0","  group_by(date) %>% "
+"0","  summarise(count = n()) %>% "
+"0","  slice_max(count, n = 10)"

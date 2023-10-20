@@ -1,0 +1,7 @@
+"0","```r
+```r
+library(tidyverse)
+energy_scotland <- read_csv(\data/energy_scotland.csv\)
+all_salaries <- read_csv(\data/all_salaries.csv\)
+```
+```"

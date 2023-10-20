@@ -1,0 +1,100 @@
+---
+title: "Cancellations"
+output: html_notebook
+---
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+
+x3colours = c("#41b6c4", "#2c7fb8", "#253494")
+x2colours = c("#41b6c4", "#253494")
+
+weather_events <- read_csv("../clean_data/weather_events.csv")
+
+ewr_disruptions <- read_csv("../clean_data/all_flight_data.csv") %>% 
+  filter(origin == "EWR") %>% 
+  mutate(date = date(time_hour), .after = time_hour) %>% 
+  mutate(weather_event_flag = case_when(date %in% weather_events$date ~ "Weather Event",
+                                        precip > 3 ~ "Weather Event",
+                                        wind_speed > 12.5 ~ "Weather Event",
+                                        visib < 1 ~ "Weather Event",
+                                        snow >= 2.4 ~ "Weather Event",
+                                        .default = "Normal Weather"))
+  
+```
+
+# Cancellations against weather types
+```{r}
+ewr_disruptions %>% 
+  filter(cancelled_flag == 1) %>% 
+  ggplot(aes(x = precip)) +
+  geom_histogram(bins = 50)
+
+ewr_disruptions %>% 
+  filter(cancelled_flag == 1) %>% 
+  ggplot(aes(x = wind_speed)) +
+  geom_histogram(bins = 50)
+
+ewr_disruptions %>% 
+  filter(cancelled_flag == 1) %>% 
+  ggplot(aes(x = visib)) +
+  geom_histogram(bins = 50)
+
+ewr_disruptions %>% 
+  filter(cancelled_flag == 1) %>% 
+  ggplot(aes(x = pressure)) +
+  geom_histogram(bins = 50)
+
+ewr_disruptions %>% 
+  filter(cancelled_flag == 1) %>% 
+  ggplot(aes(x = snow)) +
+  geom_histogram(bins = 50)
+```
+No clear evidence here - too many cancellations in "normal" conditions to determine if weather was a factor.
+
+
+Cancellations during declared weatehr event or most extreme 1% of weather types
+```{r}
+ewr_disruptions %>% 
+  filter(cancelled_flag == 1) %>% 
+  group_by(weather_event_flag) %>%
+  summarise(count = n()) %>% 
+  ggplot(aes(x = weather_event_flag, y = count)) +
+  geom_col(fill = x2colours) +
+  labs(x = "",
+       y = "Cancelled Flights\n",
+       title = "Cancellations during Weather Events",
+       subtitle = "NWS Severe Weather Event or Most Extreme 1% of Snow, Wind, Rain or Visibility") + 
+  geom_text(aes(label = count), colour = "white", vjust = 1.5) +
+  theme_minimal()
+```
+
+
+```{r}
+# weather_event_days <- ewr_disruptions %>%
+#   filter(weather_event_flag == "Weather Event") %>%
+#   distinct(date) %>%
+#   count() %>%
+#   pull()
+# 
+# no_weather_event_days <- ewr_disruptions %>%
+#   filter(weather_event_flag == "Normal Weather") %>%
+#   distinct(date) %>%
+#   count() %>%
+#   pull()
+
+ewr_disruptions %>% 
+  filter(cancelled_flag == 1) %>% 
+  group_by(weather_event_flag, date) %>%
+  summarise(count = n(), .groups = "drop_last") %>%
+  summarise(count_per_day = round(mean(count), 0)) %>% 
+  ggplot(aes(x = weather_event_flag, y = count_per_day)) +
+  geom_col(fill = x2colours) +
+  labs(x = "",
+       y = "Cancelled Flights\n",
+       title = "Cancellations during Weather Events, Mean per Day",
+       subtitle = "NWS Severe Weather Event or Most Extreme 1% of Snow, Wind, Rain or Visibility") + 
+  geom_text(aes(label = count_per_day), colour = "white", vjust = 1.5) +
+  theme_minimal()
+```
+

@@ -1,0 +1,13 @@
+"0","```r
+```r
+# Method 1
+energy_scotland %>%
+  filter(energy_prod == max(energy_prod))
+```
+```r
+
+# Method 2
+energy_scotland %>%
+  slice_max(energy_prod, n = 1, with_ties = TRUE)
+```
+```"

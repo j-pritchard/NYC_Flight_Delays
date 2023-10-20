@@ -1,0 +1,12 @@
+"0","```r
+```r
+energy_scotland_rating <- energy_scotland %>% 
+  mutate(rating = case_when(energy_prod > 20000 ~ \very high\,
+                            energy_prod > 10000 ~ \high\,
+                            energy_prod > 5000  ~ \medium\,
+                            energy_prod > 2000  ~ \low\,
+                            .default = \very low\))
+
+energy_scotland_rating
+```
+```"

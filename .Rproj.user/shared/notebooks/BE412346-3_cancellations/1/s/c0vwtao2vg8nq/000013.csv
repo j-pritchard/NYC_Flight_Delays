@@ -1,0 +1,5 @@
+"0",""
+"0","ewr_disruptions %>% "
+"0","  filter(cancelled_flag == 1) %>% "
+"0","  ggplot(aes(x = visib)) +"
+"0","  geom_histogram(bins = 50)"

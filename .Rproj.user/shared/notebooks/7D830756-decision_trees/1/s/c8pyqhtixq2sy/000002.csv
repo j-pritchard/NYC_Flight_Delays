@@ -1,0 +1,17 @@
+"0","```r
+# add predictions
+titanic_test_pred <- titanic_test %>% 
+  add_predictions(titanic_tree, type = \"class\")
+
+# confusion matrix
+conf_mat <- titanic_test_pred %>% 
+  conf_mat(truth = survived,
+           estimate = pred)
+
+conf_mat
+```"
+"1","          Truth
+Prediction No Yes
+       No  80  27
+       Yes  3  32
+"

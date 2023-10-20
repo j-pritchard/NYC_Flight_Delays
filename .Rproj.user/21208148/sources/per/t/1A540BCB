@@ -1,0 +1,29 @@
+{
+    "id": "1A540BCB",
+    "path": "~/CodeClan/codeclan_work/final_project/analysis_and_report/2_weather_delays.Rmd",
+    "project_path": "analysis_and_report/2_weather_delays.Rmd",
+    "type": "r_markdown",
+    "hash": "3712007345",
+    "contents": "",
+    "dirty": false,
+    "created": 1697022535429.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "tempName": "Untitled1",
+        "chunk_output_type": "inline",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "275,12",
+        "scrollLine": "259",
+        "docOutlineVisible": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1697704374,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1697704374197,
+    "read_only": false,
+    "read_only_alternatives": []
+}

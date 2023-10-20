@@ -1,0 +1,8 @@
+"0","```r
+specificity <- thrones_test_pred %>% 
+  specificity(truth = met_dragon_flag,
+              estimate = pred,
+              event_level = \"second\")
+
+specificity
+```"

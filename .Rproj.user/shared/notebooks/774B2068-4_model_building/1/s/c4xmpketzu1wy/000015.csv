@@ -1,0 +1,4 @@
+"0","# importance(rf_classifier)"
+"0",""
+"0","vip::vip(rf_classifier, geom = ""col"") +"
+"0","  theme_minimal()"

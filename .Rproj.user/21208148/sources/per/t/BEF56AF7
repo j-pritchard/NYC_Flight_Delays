@@ -1,0 +1,28 @@
+{
+    "id": "BEF56AF7",
+    "path": "~/CodeClan/codeclan_work/final_project/analysis_and_report/nyc_flight_delays_report.Rmd",
+    "project_path": "analysis_and_report/nyc_flight_delays_report.Rmd",
+    "type": "r_markdown",
+    "hash": "4279849815",
+    "contents": "",
+    "dirty": false,
+    "created": 1696928289040.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "tempName": "Untitled1",
+        "chunk_output_type": "inline",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "84,59",
+        "scrollLine": "81"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1697754776,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1697754776080,
+    "read_only": false,
+    "read_only_alternatives": []
+}

@@ -1,0 +1,16 @@
+"0","```r
+```r
+subsetting_salaries <- function(dataframe_input, job_area_input, salary_input) {
+  
+  stopifnot(is.data.frame(dataframe_input))
+  stopifnot(is.character(job_area_input))
+  stopifnot(is.numeric(salary_input))
+  
+  dataframe_input %>% 
+    filter(job_area == job_area_input) %>% 
+    filter(salary >= salary_input)
+}
+
+subsetting_salaries(all_salaries, \Human Resources\, 30000)
+```
+```"

@@ -1,0 +1,15 @@
+"0","```r
+set.seed(19)
+
+# get how many rows we have in total to work out the percentage
+n_data <- nrow(clean_thrones)
+
+# create a test sample index
+test_index <- sample(1:n_data, size = n_data*0.2)
+
+# create test set
+thrones_test  <- slice(clean_thrones, test_index)
+
+# create training set
+thrones_train <- slice(clean_thrones, -test_index)
+```"

@@ -1,0 +1,9 @@
+"0","```r
+test_split <- stratified(indt = titanic_clean,
+                         group = c(\"survived\", \"pclass\", \"sex\", \"age_status\"),
+                         size = 0.2,
+                         both = TRUE)
+
+titanic_train <- test_split[[2]]
+titanic_test <- test_split[[1]]
+```"

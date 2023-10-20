@@ -1,0 +1,13 @@
+"0",""
+"0","roc_obj_5pred <- flights_with_5pred %>%"
+"0","  roc(response = disrupted_flag, predictor = pred)"
+"2","Setting levels: control = Not Disrupted, case = Disrupted
+"
+"2","Setting direction: controls < cases
+"
+"0","roc_curve <- ggroc(data = roc_obj_5pred, legacy.axes = TRUE) +"
+"0","  coord_fixed() + "
+"0","  ylab(""sensitivity (TPR)"") + "
+"0","  xlab(""1-specificity (TNR)"")"
+"0",""
+"0","roc_curve"

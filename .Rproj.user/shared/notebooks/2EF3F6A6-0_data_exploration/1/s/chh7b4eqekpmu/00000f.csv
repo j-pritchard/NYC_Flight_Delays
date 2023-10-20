@@ -1,0 +1,9 @@
+"0","all_flights %>% 
+  filter(cancelled_flag == 1) %>%  
+  mutate(week = week(time_hour)) %>% 
+  group_by(origin, week) %>% 
+  summarise(count = n()) %>% 
+  ggplot(aes(x = week, y = count)) +
+  geom_line(aes(colour = origin))
+"
+"2","`summarise()` has grouped output by 'origin'. You can override using the `.groups` argument."

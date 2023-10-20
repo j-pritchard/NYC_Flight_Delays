@@ -1,0 +1,346 @@
+---
+title: "Model Building"
+output: html_notebook
+---
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(rpart)
+library(rpart.plot)
+library(ranger)
+library(pROC)
+
+# x3colours = c("#41b6c4", "#2c7fb8", "#253494")
+
+flights <- read_csv("../clean_data/all_flight_data.csv") %>% 
+  filter(origin == "EWR") %>% 
+  mutate(disrupted_flag = factor(disrupted_flag, levels = c(0, 1), labels = c("Not Disrupted", "Disrupted")),
+         hour = hour(time_hour)) %>% 
+  select(temp, dewpoint, humidity, precip, pressure,
+         wind_speed, wind_dir, visib, snow, disrupted_flag)
+
+# flights_rounded <- flights %>% 
+#   mutate(temp = round(temp, 0),
+#          dewpoint = round(dewpoint, 0),
+#          precip = round(precip, 0),
+#          wind_speed = round(wind_speed, 0),
+#          visib = round(visib, 0),
+#          snow = round(snow, 0),
+#          humidity = round(humidity, -1),
+#          pressure = round(pressure, 0),
+#          wind_dir = round(wind_dir, -1))
+
+# write_csv(flights_rounded, "../clean_data/ewr_flights_weather_rounded.csv")
+```
+
+
+# 1 Random forest on all weather
+
+## Split Test/Train Data with all weather cols
+```{r}
+nrows <- nrow(flights)
+test_index <- sample(1 : nrows, size = nrows*0.2)
+flights_test <- slice(flights, test_index)
+flights_train <- slice(flights, -test_index)
+```
+
+## Single Tree
+```{r}
+flights_fit <- rpart(
+  formula = disrupted_flag ~ ., 
+  data = flights_train,
+  method = "class",
+  control = rpart.control(cp = 0.005))
+
+rpart.plot(flights_fit,
+           yesno = 2, # writes yes/no at all splits
+           type = 2, # where conditions lie
+           fallen.leaves = TRUE, # TRUE aligns leaves at bottom
+           faclen = 6, # max char length for categoricals
+           digits = 3, # sig figs of numbers
+           split.border.col = 1)
+```
+
+## Plant forest
+```{r}
+rf_classifier <- ranger(disrupted_flag ~ ., 
+                        data = flights_train,
+                        importance = "impurity", 
+                        num.trees = 100, 
+                        mtry = 2, 
+                        min.node.size = 1)
+```
+
+## Plot importance
+```{r}
+# importance(rf_classifier)
+
+vip::vip(rf_classifier, geom = "col") +
+  theme_minimal()
+```
+
+## Check forest accuracy
+```{r}
+flights_test_pred <- flights_test %>%
+  mutate(pred = as.factor(predict(rf_classifier, data = flights_test)$predictions))
+
+caret::confusionMatrix(flights_test_pred$disrupted_flag,
+                       flights_test_pred$pred)
+```
+
+# 2 Random forest with 5 weather predictors
+
+## Split Test/Train Data with reduced weather cols
+```{r}
+flights_mini <- flights %>%
+  select(snow, precip, wind_speed, wind_dir, visib, disrupted_flag)
+
+nrows <- nrow(flights_mini)
+test_index <- sample(1 : nrows, size = nrows*0.1)
+flights_mini_test <- slice(flights_mini, test_index)
+flights_mini_train <- slice(flights_mini, -test_index)
+```
+
+## Single tree
+```{r}
+flights_fit <- rpart(
+  formula = disrupted_flag ~ ., 
+  data = flights_mini_train,
+  method = "class",
+  control = rpart.control(cp = 0.005))
+
+rpart.plot(flights_fit,
+           yesno = 2, # writes yes/no at all splits
+           type = 2, # where conditions lie
+           fallen.leaves = TRUE, # TRUE aligns leaves at bottom
+           faclen = 6, # max char length for categoricals
+           digits = 3, # sig figs of numbers
+           split.border.col = 1)
+```
+
+## Plant forest
+```{r}
+rf_classifier <- ranger(disrupted_flag ~ ., 
+                        data = flights_mini_train,
+                        importance = "impurity", 
+                        num.trees = 100, 
+                        mtry = 2, 
+                        min.node.size = 5)
+
+vip::vip(rf_classifier, geom = "col") +
+  theme_minimal()
+```
+
+## Check forest accuracy
+```{r}
+flights_mini_test_pred <- flights_mini_test %>%
+  mutate(pred = as.factor(predict(rf_classifier, data = flights_mini_test)$predictions))
+
+caret::confusionMatrix(flights_mini_test_pred$disrupted_flag,
+                       flights_mini_test_pred$pred)
+```
+
+# 3 Manual Model with 5 weather predictors
+
+```{r}
+flights_logreg_model <- glm(disrupted_flag ~ snow + wind_speed + precip + 
+                                  dewpoint + visib,
+                                data = flights, family = binomial(link = 'logit'))
+flights_logreg_model
+```
+
+```{r}
+flights_with_5pred <- flights %>%
+  add_predictions(flights_logreg_model, type = "response")
+
+roc_obj_5pred <- flights_with_5pred %>%
+  roc(response = disrupted_flag, predictor = pred)
+
+roc_curve <- ggroc(data = roc_obj_5pred, legacy.axes = TRUE) +
+  coord_fixed() + 
+  ylab("sensitivity (TPR)") + 
+  xlab("1-specificity (TNR)")
+
+roc_curve
+
+auc(roc_obj_5pred)
+```
+
+# 4 Manual model, trained on disrupted days, all weather, time and carrier
+
+```{r message=FALSE}
+flights <- read_csv("../clean_data/all_flight_data.csv") %>% 
+  mutate(hour = hour(time_hour), .before = sched_dep_time)  
+
+bad_days <- flights %>% 
+  filter(disrupted_flag == TRUE) %>%
+  group_by(date) %>% 
+  summarise(count = n()) %>% 
+  filter(count > (mean(count) + 2 * sd(count))) %>% 
+  pull(date)
+
+bad_days_flights <- flights %>% 
+  filter(origin == "EWR",
+         date %in% bad_days)
+
+good_days_flights <- flights %>% 
+  filter(origin == "EWR",
+         !date %in% bad_days)
+
+bad_days_logreg_model <- glm(disrupted_flag ~
+                               hour + temp + dewpoint + humidity + precip +
+                               pressure + wind_speed + wind_dir + visib + snow +
+                               carrier,
+                             data = bad_days_flights,
+                             family = binomial(link = 'logit'))
+
+bad_days_with_all_pred <- bad_days_flights %>%
+  add_predictions(bad_days_logreg_model, type = "response")
+
+library(pROC)
+roc_obj_all_pred <- bad_days_with_all_pred %>%
+  roc(response = disrupted_flag, predictor = pred)
+
+roc_curve <- ggroc(data = roc_obj_all_pred, legacy.axes = TRUE) +
+  coord_fixed() + 
+  ylab("sensitivity (TPR)") + 
+  xlab("1-specificity (TNR)")
+
+roc_curve
+
+auc(roc_obj_all_pred)
+```
+## Compare model with other data
+```{r}
+good_days_flights_reduced <- good_days_flights %>%
+  select(hour, temp, dewpoint, humidity, precip, pressure, wind_speed,
+         wind_dir, visib, snow, carrier, disrupted_flag) %>% 
+  #filter(!carrier %in% c("F9", "HA")) %>% 
+  add_predictions(bad_days_logreg_model, type = "response")
+
+library(pROC)
+roc_obj_good_pred <- good_days_flights_reduced %>%
+  roc(response = disrupted_flag, predictor = pred)
+
+roc_curve <- ggroc(data = roc_obj_good_pred, legacy.axes = TRUE) +
+  coord_fixed() + 
+  ylab("sensitivity (TPR)") + 
+  xlab("1-specificity (TNR)")
+
+roc_curve
+
+auc(roc_obj_good_pred)
+```
+
+# 5 Random Forest trained on disruption, using weather, time and airline
+
+## Split Test/Train Data for bad_day_flights
+```{r}
+bad_days_flights_reduced <- bad_days_flights %>%
+  select(hour, temp, dewpoint, humidity, precip, pressure, wind_speed,
+         wind_dir, visib, snow, carrier, disrupted_flag)
+
+nrows <- nrow(bad_days_flights_reduced)
+test_index <- sample(1 : nrows, size = nrows*0.2)
+bad_days_flights_reduced_test <- slice(bad_days_flights_reduced, test_index)
+bad_days_flights_reduced_train <- slice(bad_days_flights_reduced, -test_index)
+```
+
+## Plant forest
+```{r}
+rf_classifier <- ranger(disrupted_flag ~ ., 
+                        data = bad_days_flights_reduced_train,
+                        importance = "impurity", 
+                        num.trees = 100, 
+                        mtry = 2, 
+                        min.node.size = 5)
+
+vip::vip(rf_classifier, geom = "col", num_features = 11) +
+  theme_minimal()
+```
+
+## Check forest accuracy against test data
+```{r}
+bad_days_flights_reduced_test_pred <- bad_days_flights_reduced_test %>%
+  mutate(pred = as.factor(round(predict(rf_classifier, data = bad_days_flights_reduced_test)$predictions, 0)),
+         disrupted_flag = factor(disrupted_flag))
+
+caret::confusionMatrix(bad_days_flights_reduced_test_pred$disrupted_flag,
+                       bad_days_flights_reduced_test_pred$pred)
+```
+
+## Check accuracy against other data
+```{r}
+good_days_flights_reduced <- good_days_flights %>%
+  select(hour, temp, dewpoint, humidity, precip, pressure, wind_speed,
+         wind_dir, visib, snow, carrier, disrupted_flag)
+
+ewr_flights_pred <- good_days_flights_reduced %>%
+  mutate(pred = as.factor(round(predict(rf_classifier, data = good_days_flights_reduced)$predictions, 0)),
+         disrupted_flag = factor(disrupted_flag))
+
+caret::confusionMatrix(ewr_flights_pred$disrupted_flag,
+                       ewr_flights_pred$pred)
+```
+
+
+
+# 6 Random forest on all weather and time and carrier
+
+## Split Test/Train Data with all weather cols
+```{r message=FALSE}
+flights <- read_csv("../clean_data/all_flight_data.csv") %>% 
+  filter(origin == "EWR") %>% 
+  mutate(disrupted_flag = factor(disrupted_flag, levels = c(0, 1), labels = c("Not Disrupted", "Disrupted")),
+         hour = hour(time_hour)) %>% 
+  select(hour, carrier, temp, dewpoint, humidity, precip, pressure,
+         wind_speed, wind_dir, visib, snow, disrupted_flag)
+
+nrows <- nrow(flights)
+test_index <- sample(1 : nrows, size = nrows*0.2)
+flights_test <- slice(flights, test_index)
+flights_train <- slice(flights, -test_index)
+```
+
+## Single Tree
+```{r}
+flights_fit <- rpart(
+  formula = disrupted_flag ~ ., 
+  data = flights_train,
+  method = "class",
+  control = rpart.control(cp = 0.01))
+
+rpart.plot(flights_fit,
+           yesno = 2, # writes yes/no at all splits
+           type = 2, # where conditions lie
+           fallen.leaves = TRUE, # TRUE aligns leaves at bottom
+           faclen = 6, # max char length for categoricals
+           digits = 3, # sig figs of numbers
+           split.border.col = 1)
+```
+
+## Plant forest
+```{r}
+rf_classifier <- ranger(disrupted_flag ~ ., 
+                        data = flights_train,
+                        importance = "impurity", 
+                        num.trees = 100, 
+                        mtry = 2, 
+                        min.node.size = 1)
+```
+
+## Plot importance
+```{r}
+# importance(rf_classifier)
+
+vip::vip(rf_classifier, geom = "col") +
+  theme_minimal()
+```
+
+## Check forest accuracy
+```{r}
+flights_test_pred <- flights_test %>%
+  mutate(pred = as.factor(predict(rf_classifier, data = flights_test)$predictions))
+
+caret::confusionMatrix(flights_test_pred$disrupted_flag,
+                       flights_test_pred$pred)
+```

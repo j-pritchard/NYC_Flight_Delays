@@ -1,0 +1,5 @@
+"0","all_flights <- read_csv(""../clean_data/all_flight_data.csv"") %>% 
+  mutate_at(c(delayed_flag, cancelled_flag, disrupted_flag), as.factor)
+"
+"2","Error: object 'delayed_flag' not found
+"

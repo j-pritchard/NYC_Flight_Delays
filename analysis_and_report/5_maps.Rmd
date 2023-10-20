@@ -1,0 +1,56 @@
+---
+title: "Maps"
+output: html_notebook
+---
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(leaflet)
+
+ewr_flights <- read_csv("../clean_data/all_flight_data.csv") %>% 
+  filter(origin == "EWR") %>% 
+  drop_na(dep_time)
+```
+
+
+```{r message=FALSE}
+worst_routes <- ewr_flights %>%
+  group_by(carrier, flight, dest) %>% 
+  reframe(number = n(),
+          prop_delayed = sum(delayed_flag)/n(),
+          mean_delay = mean(dep_delay),
+          origin_lat, origin_lon, dest, dest_name, dest_lat, dest_lon) %>% 
+  filter(number >= 10,
+         prop_delayed > 0.5) %>% 
+  ungroup() %>% 
+  distinct() %>% 
+  mutate(id = row_number(), .before = carrier)
+```
+
+```{r}
+worst_routes_lines <- data.frame(
+  id = worst_routes$id,
+  lat = c(worst_routes$origin_lat, worst_routes$dest_lat),
+  lon = c(worst_routes$origin_lon, worst_routes$dest_lon)
+) %>% 
+  arrange(id)
+```
+
+
+
+
+
+
+```{r}
+worst_route_map <- worst_routes %>% 
+  leaflet() %>% 
+  addTiles() %>% 
+  addCircleMarkers(lat = ~dest_lat, lng = ~dest_lon,
+                   radius = 4, weight = 2,
+                   label = ~dest_name) %>%
+  addPolylines(lat = worst_routes_lines$lat,
+               lng = worst_routes_lines$lon,
+               weight = 1)
+
+worst_route_map
+```
+
