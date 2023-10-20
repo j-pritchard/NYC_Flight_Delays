@@ -11,3 +11,4 @@ of weather they should be most concerned about.
 - Hypothesis Testing
 - Data Visualisation
 - Model Building
+- Geospacial data mapping
