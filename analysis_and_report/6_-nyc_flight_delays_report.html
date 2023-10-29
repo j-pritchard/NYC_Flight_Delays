@@ -2828,22 +2828,22 @@ the Costs and Economic Impact of Flight Delays…Ashmith Anupkumar, May
 <p>Five pieces of data were provided by Newark airport:</p>
 <ul>
 <li>Airlines: Connects the two-letter acronym for twelve US airlines to
-their full name.</li>
-<li>Airports: Information about US airports, including geospacial
-data.</li>
-<li>Flights: Details on over 300,000 domestic flights that departed the
-three main NYC airports in 2017.</li>
-<li>Planes: Details of over 3,500 aircraft in service in the US in
-2017.</li>
+their full name (12 observations of 2 variables)</li>
+<li>Airports: Information about US airports (1333 observations of 8
+variables, including geospacial data)</li>
+<li>Flights: Details on domestic flights that departed the three main
+NYC airports in 2017 (303748 observations of 19 variables)</li>
+<li>Planes: Details of over aircraft in service in the US in 2017 (3521
+observations of 9 variables)</li>
 <li>Weather: Hourly weather data from the three major NYC airports from
-2017.</li>
+2017 (26201 observations of 15 variables)</li>
 </ul>
 <p>Weather data was supplemented with more detailed and complete data
 from <a href="https://power.larc.nasa.gov/data-access-viewer/">NASA</a>.</p>
 <p>Information on severe weather events was accessed from the <a href="https://www.weather.gov/okx/stormevents">National Weather Service
 Archive</a></p>
 <p>Snowfall data was obtained from <a href="https://www.ncei.noaa.gov/access/monitoring/daily-snow/NJ/snowfall/20170101">National
-Centers for Environmental Information</a></p>
+Centers for Environmental Information</a>.</p>
 </div>
 <div id="types-of-data" class="section level3">
 <h3>Types of data</h3>
@@ -2921,8 +2921,8 @@ departures so became pertinent to analysis of possible weather-related
 disruption.</p>
 <p>Airport data was missing information on Puerto Rican airports. Puerto
 Rico is an unincorporated territory of the United States but flights
-there were included in the flight data so the airports were added to the
-airports data set for completeness.</p>
+there were included in the flight data so the missing airports were
+added to the airports data set for completeness.</p>
 </div>
 </div>
 <div id="ethics" class="section level2">
@@ -2963,7 +2963,9 @@ be part of the final, cleaned, data. A star schema was drawn to map out
 how the datasets could join using matching keys. After cleaning and
 joining, clean data was saved to the appropriate folder and tested in
 the same notebook as initial exploration had taken place. Collectively,
-this took around two days.</p>
+this took around two days. After the cleaning and joining of the various
+data sources, my main file contained 303748 observations of 28
+variables.</p>
 <p>Each of the questions was investigated in a separate R notebook, with
 roughly one day spent answering each question. Work on modelling, for
 the fourth question took two days, with additional weather data, on
